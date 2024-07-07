@@ -1,0 +1,571 @@
+---
+format:
+  revealjs:
+    theme: [night, assets/phdcn_style.scss]
+    logo: img/phdcn_logo_white.svg
+    incremental: false
+    self-contained: false
+    width: 1200
+    height: 800
+editor: source
+mouse-wheel: true
+history: false
+---
+
+
+
+## [Exposure to Gun Violence<br>and Gun Carrying<br>from Childhood to Age 40<br>over a 25-year Era of Change]{.r-fit-text} {background-image="img/stephan-cassara-KnAIsBuitGg-unsplash.jpg" background-opacity="0.4"}
+
+&nbsp;
+
+|                    |                           |
+|-------------------:|:--------------------------|
+| Charles C. Lanfear | *University of Cambridge* |
+| Rebecca Bucci      | *Harvard University*      |
+| David S. Kirk      | *University of Pennsylvania*    |
+| Robert J. Sampson  | *Harvard University*      |
+
+
+
+```{r setup}
+#| include: false
+knitr::opts_chunk$set(dev = "ragg_png",  
+                      dev.args = list(bg = 'transparent'),
+                      message = FALSE,
+                      echo = FALSE,
+                      warning = FALSE,
+                      fig.showtext = TRUE,
+                      fig.retina = 5,
+                      fig.align = "center")
+library(tidyverse)
+library(ggforce)
+library(showtext)
+library(janitor)
+library(survey)
+library(interval)
+library(flextable)
+source("./syntax/project_functions.R")
+source("./syntax/functions/survival_curve_functions.R")
+load("./data/survival_data.RData")
+load("./data/survey_index.RData")
+
+plot_font <- "Open Sans"
+font_add_google(name = plot_font)
+showtext_auto()
+gg_color_hue <- function(n) {
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
+}
+```
+
+
+
+## Homicide in the US {background-image="img/stephan-cassara-KnAIsBuitGg-unsplash.jpg" background-opacity="0.2"}
+
+```{r homicide-in-us}
+#| cache: false
+
+load("./data/cdc_mortality.RData")
+cdc_mortality |>
+  filter(year >= 1987) |>
+  ggplot(aes(x = year, y = rate, group = type, color = type, linetype = type)) + 
+  geom_line(linewidth = 1) +
+  scale_linetype_manual(values = c("All" = "dashed", "Firearm" = "solid")) +
+  geom_hline(yintercept = 0, color = "white", linewidth = 0.25) +
+  geom_text(data = ~ . |> filter(year == 1988) |> 
+              mutate(rate = ifelse(type == "All", rate + 1, rate -1)), 
+            aes(label = type), 
+            family = plot_font,
+            size = 6) +
+  labs(x = NULL, y = "Rates per 100,000", caption = "Source: CDC WONDER") +
+  theme_minimal(base_size = 24) +
+  theme(panel.grid = element_blank(),
+        axis.text = element_text(color = "white"),
+        text = element_text(family = plot_font,  color = "white"),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA),
+        legend.position = "none")
+```
+
+Spiked recently and increasingly involves guns
+
+## Homicide in Chicago {background-image="img/stephan-cassara-KnAIsBuitGg-unsplash.jpg" background-opacity="0.2"}
+
+```{r homicide-in-chicago}
+#| cache: false
+
+load("./data/chicago_rates_year.RData")
+chicago_rates_year |>
+  filter(year >= 1985) |>
+  ggplot(aes(x = year, y = rate, group = type, color = type, linetype = type)) + 
+  geom_line(linewidth = 1) +
+  scale_linetype_manual(values = c("All" = "dashed", "Firearm" = "solid")) +
+  geom_hline(yintercept = 0, color = "white", linewidth = 0.25) +
+  geom_text(data = ~ . |> filter(year == 1987) |> mutate(rate = ifelse(type == "All", rate + 4, rate -3)), aes(label = type), family = plot_font, size = 6) +
+  labs(x = NULL, y = "Rates per 100,000", caption = "Source: Chicago PD") +
+  theme_minimal(base_size = 24) +
+  theme(panel.grid = element_blank(),
+        axis.text = element_text(color = "white"),
+        text = element_text(family = plot_font,  color = "white"),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA),
+        legend.position = "none")
+```
+
+Exaggerated in cities like Chicago, Philadelphia, Dallas
+
+## {background-image="img/stephan-cassara-KnAIsBuitGg-unsplash.jpg" background-opacity="0.2"}
+
+![](img/jno.png)
+
+<br>Our questions:
+
+* To what extent were individuals growing up in Chicago in the 1990s and early 2000s **exposed to gun violence**?
+* And how did this exposure differ by **race**, **sex** and birth **cohort**?
+
+
+
+# The {background-image="img/max-bender-yb7Yg3Rv7WA-unsplash.jpg" background-opacity="0.4"}
+
+![](img/phdcn_logo_white.svg)
+
+##  {background-image="img/max-bender-yb7Yg3Rv7WA-unsplash.jpg" background-opacity="0.2"}
+
+### Project on Human Development in Chicago Neighborhoods
+
+::: nonincremental
+-   6200 children in 7 birth cohorts
+-   3 interviews from 1995--2003
+-   Community surveys in 1995 and 2003
+:::
+
+##  {background-image="img/max-bender-yb7Yg3Rv7WA-unsplash.jpg" background-opacity="0.2"}
+
+### Project on Human Development in Chicago Neighborhoods
+
+::: nonincremental
+-   6200 children in 7 birth cohorts
+-   3 interviews from 1995--2003
+-   Community surveys in 1995 and 2003
+:::
+
+::: columns
+::: {.column width="70%"}
+::: nonincremental
+### PHDCN+
+
+-   Representative sample of 4 cohorts
+-   1057 interviewed in 2012
+-   682 followed-up in 2021
+:::
+:::
+
+::: {.column width="30%"}
+Funded by:<br>![](img/ncgvr.svg)
+:::
+:::
+
+
+## [Age first seeing someone get shot]{.r-fit-text} {background-image="img/max-bender-yb7Yg3Rv7WA-unsplash.jpg" background-opacity="0.2"}
+
+```{r}
+#| cache: false
+#| warning: false
+#| message: false
+#| fig-width: 12
+#| fig-height: 5
+#| out-width: "100%"
+#| 
+draw_curve <- function(covar, outcome = outcome, xaxis = "age", ylims = c(0,60), noaxis=FALSE, year_mark = FALSE, strata_labels = TRUE){
+  plot_out <- plot_curve(covar = covar, 
+           outcome = outcome, 
+           xaxis = xaxis, 
+           title = "none", 
+           b_size = 12, 
+           min_at_risk = 10, 
+           w5_sample = FALSE, 
+           weights = TRUE, 
+           trim_level = 0.95, 
+           font_fam = plot_font, 
+           ylims = ylims, 
+           year_mark = FALSE,
+           title_letters = FALSE,
+           risk_table = FALSE) +
+  labs(title = str_to_title(covar)) +
+  geom_vline(xintercept = 21, linetype = "dashed", color = "white", linewidth = 0.5)
+  if(strata_labels){
+   plot_out <- plot_out +
+     geom_text(data = ~. |> 
+                    distinct(strata) |>
+                    mutate(age = case_match(as.character(strata),
+                             "Black" ~ 28,
+                             "White" ~ 33,
+                             "Hispanic" ~ 16,
+                             "Male" ~ 26,
+                             "Female" ~ 26,
+                             "1981" ~ 32,
+                             "1987" ~ 29,
+                             "1996" ~ 29,
+                             "1984" ~ 38
+                           ),
+                           cdf = case_match(as.character(strata),
+                             "Black" ~ 30,
+                             "White" ~ 4,
+                             "Hispanic" ~ 18.5,
+                             "Male" ~ 29,
+                             "Female" ~ 8,
+                             "1981" ~ 32,
+                             "1987" ~ 25,
+                             "1996" ~ 3,
+                             "1984" ~ 10
+                           )),
+                  aes(x = age, y = cdf, label = strata, color = strata),
+            size = 7,
+            family = plot_font)
+  }
+  plot_out <- plot_out +
+    theme_minimal(base_size = 20) +
+    theme(panel.grid = element_blank(),
+          panel.grid.major.y = element_line(color = "grey25"),
+          axis.ticks.x = element_line(color = "white"),
+          axis.text = element_text(color = "white"),
+          text = element_text(family = plot_font,  color = "white"),
+          legend.position = "none",
+          panel.background = element_rect(fill = "transparent",colour = NA),
+          plot.background = element_rect(fill = "transparent",colour = NA),
+          plot.margin = margin(0,1,0,1))
+  if(noaxis){
+    plot_out <- plot_out + theme(axis.text.y = element_blank())
+  }
+  return(plot_out)
+}
+
+((draw_curve("race", "seen_shot") + ggtitle("Race / Ethnicity")) + 
+  draw_curve("sex", "seen_shot", noaxis = TRUE) + 
+  draw_curve("cohort", "seen_shot", noaxis = TRUE)) &
+  plot_annotation(theme = theme(plot.background = element_rect(fill = "transparent",colour = NA), text = element_text(family = plot_font,  color = "white")), caption = "Estimated cumulative incidence from non-parametric Turnbull MLE with survey and attrition weights")
+```
+
+## [Age at first being shot]{.r-fit-text} {background-image="img/max-bender-yb7Yg3Rv7WA-unsplash.jpg" background-opacity="0.2"}
+
+```{r}
+#| cache: false
+#| warning: false
+#| message: false
+#| fig-width: 14
+#| fig-height: 8
+#| out-width: "100%"
+#| 
+draw_curve <- function(covar, outcome = outcome, xaxis = "age", ylims = c(0,60), noaxis=FALSE, year_mark = FALSE, strata_labels = TRUE){
+  plot_out <- plot_curve(covar = covar, 
+           outcome = outcome, 
+           xaxis = xaxis, 
+           title = "none", 
+           b_size = 12, 
+           min_at_risk = 10, 
+           w5_sample = FALSE, 
+           weights = TRUE, 
+           trim_level = 0.95, 
+           font_fam = plot_font, 
+           ylims = ylims, 
+           year_mark = FALSE,
+           title_letters = FALSE,
+           risk_table = FALSE) +
+  labs(title = str_to_title(covar)) +
+  geom_vline(xintercept = 21, linetype = "dashed", color = "white", linewidth = 0.5)
+  if(strata_labels){
+   plot_out <- plot_out +
+     geom_text(data = ~. |> 
+                    distinct(strata) |>
+                    mutate(age = case_match(as.character(strata),
+                             "Black" ~ 28,
+                             "White" ~ 33,
+                             "Hispanic" ~ 16,
+                             "Male" ~ 26,
+                             "Female" ~ 26,
+                             "1981" ~ 32,
+                             "1987" ~ 29,
+                             "1996" ~ 29,
+                             "1984" ~ 38
+                           ),
+                           cdf = case_match(as.character(strata),
+                             "Black" ~ 30,
+                             "White" ~ 4,
+                             "Hispanic" ~ 18.5,
+                             "Male" ~ 29,
+                             "Female" ~ 8,
+                             "1981" ~ 32,
+                             "1987" ~ 25,
+                             "1996" ~ 3,
+                             "1984" ~ 10
+                           )),
+                  aes(x = age, y = cdf, label = strata, color = strata),
+            size = 7,
+            family = plot_font)
+  }
+  plot_out <- plot_out +
+    theme_minimal(base_size = 20) +
+    theme(panel.grid = element_blank(),
+          panel.grid.major.y = element_line(color = "grey25"),
+          axis.ticks.x = element_line(color = "white"),
+          axis.text = element_text(color = "white"),
+          text = element_text(family = plot_font,  color = "white"),
+          legend.position = "none",
+          panel.background = element_rect(fill = "transparent",colour = NA),
+          plot.background = element_rect(fill = "transparent",colour = NA),
+          plot.margin = margin(0,1,0,1))
+  if(noaxis){
+    plot_out <- plot_out + theme(axis.text.y = element_blank())
+  }
+  return(plot_out)
+}
+
+  ((draw_curve("race", "been_shot", ylims = c(0, 15), strata_labels = TRUE) + ggtitle("Race / Ethnicity")) + 
+    draw_curve("sex", "been_shot", noaxis = TRUE, ylims = c(0, 15), strata_labels = TRUE) + 
+    draw_curve("cohort", "been_shot", noaxis = TRUE, ylims = c(0, 15), strata_labels = TRUE)) &
+  plot_annotation(theme = theme(plot.background = element_rect(fill = "transparent",colour = NA), text = element_text(family = plot_font,  color = "white")), caption = "Estimated cumulative incidence from non-parametric Turnbull MLE with survey and attrition weights")
+```
+
+## Nearby Violence Today {background-image="img/stephan-cassara-KnAIsBuitGg-unsplash.jpg" background-opacity="0.2"}
+
+![](img/proximity.png)
+
+## Takeaways {background-image="img/stephan-cassara-KnAIsBuitGg-unsplash.jpg" background-opacity="0.2"}
+
+Exposure to gun violence varies sharply by birth year, race, and sex
+
+* Adolescent exposure high in early 1990s, low afterward
+* Adult exposure low until 2016-2021
+* Black and Hispanic males at highest risk
+
+. . .
+
+**New question:** *What drove these large swings in violence and exposure?*
+
+* One key proximal cause: **gun carrying**
+
+## [Gun homicide is mostly handgun homicide]{.r-fit-text}{background-image="img/stephan-cassara-KnAIsBuitGg-unsplash.jpg" background-opacity="0.2"}
+
+```{r}
+#| cache: false
+load("./data/shr_gun_type.RData")
+shr_gun_type |>
+  mutate(pr = n/sum(n),
+         type = str_replace(type, "All Other Guns", "All other guns\nand unknown"),
+         type = fct_relevel(type, "Handguns")) |>
+ggplot(aes(x = type, y = pr, fill = type)) + 
+  geom_col() +
+  geom_text(aes(x=type, y= pr+0.05, label = type, color = type), size = 15, vjust = 0, family = plot_font, lineheight = 0.9) +
+  geom_text(aes(x = type, y = 0.12, label = scales::percent(pr)), color = "black", size = 20, family = plot_font) +
+  theme_minimal(base_size = 24) +
+  coord_cartesian(ylim = c(0, 0.88)) +
+  labs(x = NULL, y = NULL, caption = "Source: UCR SHR 1995–2021") +
+  theme(panel.grid = element_blank(),
+        axis.text = element_blank(),
+        plot.caption = element_text(size = rel(0.6)),
+        text = element_text(family = plot_font,  color = "white"),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA),
+        plot.margin = margin(30,30,30,30, "pt"),
+        legend.position = "none")
+```
+
+
+Most handgun violence involves **concealed handguns**
+
+
+## [Handgun violence over the life course]{.r-fit-text}{background-image="img/stephan-cassara-KnAIsBuitGg-unsplash.jpg" background-opacity="0.2"}
+
+Most concealed handgun research focuses on adolescents
+
+. . .
+
+But handgun offending occurs throughout the life course
+
+
+
+## [Handgun homicide is increasingly committed by adults]{.r-fit-text}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+![](img/animations/shr_rates_anim.gif)
+
+:::
+
+::: {.column width="50%"}
+![](img/animations/shr_age_distribution.gif)
+:::
+
+::::
+
+
+
+
+## [Handgun violence over the life course]{.r-fit-text}{background-image="img/stephan-cassara-KnAIsBuitGg-unsplash.jpg" background-opacity="0.2"}
+
+Most concealed handgun research focuses on adolescents
+
+
+But handgun offending occurs throughout the life course
+
+
+We know little about **gun carrying over the life course**
+
+
+## Questions {background-image="img/clay-banks-nsAn3nSW5T0-unsplash.jpg" background-opacity="0.2"}
+
+* When does **onset** of concealed carry occur?
+
+. . .
+
+* Is there **continuity** in carry over the life course?
+
+   * Does it differ for legal and illegal carry? 
+
+. . .
+
+* Does **exposure to gun violence** predict onset of carry?
+
+   * Does it differ between adolescence and early adulthood?
+
+
+## [Onset of concealed carry by age]{.r-fit-text}{background-image="img/pedro-lastra-5Bv3EcijAl4-unsplash.jpg" background-opacity="0.2"}
+
+
+```{r}
+#| cache: false
+#| fig-width: 14
+#| fig-height: 6
+#| out-width: "100%"
+
+((draw_curve("race", "concealed_carry", ylims = c(0, 50),year_mark = TRUE) + ggtitle("Race / Ethnicity")) + 
+  draw_curve("sex", "concealed_carry", ylims = c(0, 50), noaxis = TRUE, year_mark = TRUE) + 
+  draw_curve("cohort", "concealed_carry", ylims = c(0, 50), noaxis = TRUE, year_mark = TRUE))  &
+  plot_annotation(theme = theme(plot.background = element_rect(fill = "transparent", colour = NA), text = element_text(family = plot_font,  color = "white")), caption = "Estimated cumulative incidence from non-parametric Turnbull MLE")
+```
+
+* Rapidly rise in adolescence, then again in 30s
+
+## [Onset of concealed carry by year]{.r-fit-text}{background-image="img/pedro-lastra-5Bv3EcijAl4-unsplash.jpg" background-opacity="0.2"}
+
+```{r}
+#| cache: false
+((draw_curve("race", "concealed_carry", "year", ylims = c(0, 50), year_mark = TRUE) + ggtitle("Race / Ethnicity")) + 
+    draw_curve("sex", "concealed_carry","year",  noaxis = TRUE, ylims = c(0, 50), year_mark = TRUE) + 
+    draw_curve("cohort", "concealed_carry", "year", noaxis = TRUE, ylims = c(0, 50), year_mark = TRUE))  &
+  plot_annotation(theme = theme(plot.background = element_rect(fill = "transparent", colour = NA), text = element_text(family = plot_font,  color = "white")), caption = "Estimated cumulative incidence from non-parametric Turnbull MLE")
+```
+
+* Adult increases are period effects: unstable times
+
+## [Continuity in carry in 2021]{.r-fit-text}{background-image="img/benjamin-suter-mpLex62zVKQ-unsplash.jpg" background-opacity="0.2"}
+
+
+```{r}
+#| cache: false
+load("./data/continuity_within_data.RData")
+continuity_within_data |>
+  filter(group == "Within onset group" & concealed_carry_status != "Did not carry" & !str_detect(Initiation, "Never carried")) |>
+  mutate(Initiation = str_remove(Initiation, "\\n\\(n=.*$")) |>
+  ggplot(aes(x = Initiation, group = concealed_carry_status, fill = concealed_carry_status, y = pr)) +
+  geom_col() +
+  scale_fill_manual(values = as.vector(khroma::color("highcontrast")(2)), labels = c("Permitted carry" = "With permit", "Unpermitted carry" = "Without permit")) +
+  scale_y_continuous(labels = scales::label_percent(scale = 100), limits = c(0,1)) +
+  labs(x = NULL, y = NULL, title = NULL, fill = NULL) +
+  theme_minimal(base_size = 24) +
+  theme(panel.grid = element_blank(),
+        plot.caption = element_text(size = rel(0.6)),
+        axis.text = element_text(family = plot_font,  color = "white"),
+        text = element_text(family = plot_font,  color = "white"),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA),
+        plot.margin = margin(30,30,30,30, "pt"),
+        legend.position = c(0.2, 0.9))
+```
+
+* 60% of young carriers not carrying today
+* Young carriers no more likely to carry without permits
+
+
+## [Exposure to gun violence and carrying]{.r-fit-text}{background-image="img/ozzie-stern-dkwJLowVvl4-unsplash.jpg" background-opacity="0.2"}
+
+```{r}
+#| cache: false
+load("./data/exp_preds.RData")
+exp_preds  |>
+  mutate(model = str_remove(model, "\\n\\(N=.*$")) |>
+  ggplot(aes(x = model, group = exposed, fill = exposed, y = estimate)) +
+  geom_col(position = "dodge") +
+  theme_minimal(base_size = 24) +
+  coord_cartesian(ylim = c(0, 0.20)) +
+  scale_y_continuous(labels = scales::label_percent(scale = 100)) +
+  # annotate("text", x = 0, y = 0.7, label = "Age", size = 9,  hjust = 0, color = "white") +
+  scale_fill_discrete(name = "Exposed to gun violence") +
+  theme_minimal(base_size = 24) +
+  labs(x = NULL, y = NULL, caption = "Average predictions from Firth logit and Cox PH models adjusted for family and neighborhood characteristics") +
+  theme(panel.grid = element_blank(),
+        plot.caption = element_text(size = rel(0.5)),
+        text = element_text(family = plot_font,  color = "white"),
+        axis.ticks.length = unit(0, "pt"),
+        axis.text = element_text(color = "white"),
+        axis.text.x = element_text(vjust = 0.5, margin = margin(0,0,0,0), size = rel(1.2)),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.major.y = element_line(color = "grey25"),
+        legend.position = "none",
+        plot.margin = margin(0,0,0,0))
+```
+
+* Carry twice as likely in adolescence among exposed
+* No difference in carry in early adulthood
+
+
+## Takeaway: Two Processes {background-image="img/joel-mott-s-rsM-AktbA-unsplash.jpg" background-opacity="0.2"}
+
+Carry appears to follow two processes:
+
+. . .
+
+* **Adolescent-onset**
+  * One third of those ever carrying
+  * Usually age limited
+  * Sensitive to exposure
+
+. . .
+ 
+* **Adult-onset**
+  * Two thirds of those ever carrying
+  * Usually persistent
+  * Insensitive to exposure
+
+## New Questions {background-image="img/joel-mott-s-rsM-AktbA-unsplash.jpg" background-opacity="0.2"}
+
+
+* What causes selection into each process?
+
+* How does frequency of carry vary within each process?
+
+* How does macro-context impact carrying across life course?
+
+* How does life-course variation in carrying impact rates of violence?
+
+
+## Feedback and Questions {.smaller background-image="img/joel-mott-s-rsM-AktbA-unsplash.jpg" background-opacity="0.4"}
+
+Contact:
+
+| Charles C. Lanfear
+| Institute of Criminology
+| University of Cambridge
+| [cl948\@cam.ac.uk](mailto:cl948@cam.ac.uk)
+
+&zwj;
+
+For more about the PHDCN+:
+
+| PHDCN\@fas.harvard.edu
+| <https://sites.harvard.edu/phdcn/>
+| [https://doi.org/10.1007/s40865-022-00203-0](https://sites.harvard.edu/phdcn/)
+

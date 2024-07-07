@@ -1,0 +1,19 @@
+/*-- scss:defaults --*/
+$presentation-heading-color: yellow;
+
+/*-- scss:rules --*/
+.reveal .slide strong {
+  color: yellow;
+}
+.reveal .slide a {
+  color: yellow;
+}
+.reveal table td {
+  border-bottom: none;
+}
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+li li { font-size: 80%; }
