@@ -147,8 +147,8 @@ plot_curve <-
     coord_cartesian(clip = "on", xlim = xlims, ylim = ylims)
   if(xaxis == "year" & year_mark){
     curve_plot <- curve_plot +
-      annotate("text", x = c(2016, 2020), y = c(0.75*ylims[2], 0.82*ylims[2]), label = c(2016, 2020), size = 4, vjust = 0) +
-      annotate("segment", x = c(2016, 2020), xend = c(2016, 2020), y = c(0.75*ylims[2], 0.82*ylims[2]) - (ylims[2]/100), yend = c(-Inf,-Inf), linetype = "dashed", alpha = 0.75, linewidth = 0.5)
+      annotate("text", x = c(2016, 2020), y = c(0.75*ylims[2], 0.82*ylims[2]), label = c(2016, 2020), size = 4, vjust = 0, color = "white") +
+      annotate("segment", x = c(2016, 2020), xend = c(2016, 2020), y = c(0.75*ylims[2], 0.82*ylims[2]) - (ylims[2]/100), yend = c(-Inf,-Inf), linetype = "dashed", alpha = 0.75, linewidth = 0.5, color = "white")
   }
   if(xaxis == "age" & year_mark){
     curve_plot <- curve_plot +
@@ -187,8 +187,8 @@ plot_curve <-
           title = element_text(size = rel(0.8)))
   if(xaxis == "year" & covar == "cohort"){
     curve_plot <- curve_plot +
-      annotate("text", x = 2000, y = 0.45*ylims[2], label = "Age 21", size = 4) +
-      geom_segment(data = age_21 |> filter(strata == 1981), aes(x = 2000, xend = age, y = 0.42*ylims[2], yend = cdf), inherit.aes = FALSE) +
+      annotate("text", x = 2000, y = 0.55*ylims[2], label = "Age 21", size = 4, color = "white") +
+      geom_segment(data = age_21 |> filter(strata == 1981), aes(x = 2000, xend = age, y = 0.52*ylims[2], yend = cdf), inherit.aes = FALSE, color = "white") +
       geom_point(data = age_21, shape = 21, fill = "white")
   }
   if(title_letters){
