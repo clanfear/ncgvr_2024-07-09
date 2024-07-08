@@ -57,11 +57,11 @@ gg_color_hue <- function(n) {
 
 ::: {.notes}
 
-Today I will be showing selected results from two papers from the Project on Human Development in Chicago Neighborhoods, the PHDCN.
+Today I will be showing selected results from two papers from the Project on Human Development in Chicago Neighborhoods or PHDCN.
 
 The first, on life course exposures to gun violence, was published last may in JAMA Network Open
 
-The second was recently reviewed at a journal and we're currently working on revisions 
+The second, on gun carrying, was recently reviewed at a journal and we're working on revisions for resubmission now
 
 :::
 
@@ -69,7 +69,7 @@ The second was recently reviewed at a journal and we're currently working on rev
 ## Homicide in the US {background-image="img/stephan-cassara-KnAIsBuitGg-unsplash.jpg" background-opacity="0.2"}
 
 ```{r homicide-in-us}
-#| cache: false
+#| cache: true
 
 load("./data/cdc_mortality.RData")
 cdc_mortality |>
@@ -93,20 +93,20 @@ cdc_mortality |>
         legend.position = "none")
 ```
 
-Spiked recently and increasingly involves guns
+Spiked recently and increasingly committed using guns
 
 ::: {.notes}
 
-As background to this, we all know that homicide declined considerably over the last 30 years but spiked again in 2016 and, particularly, in the wake of COVID in 2020. 
+As background, we all know that homicide in the US declined considerably over the last 30 years but spiked again in 2016 and, particularly, in the wake of COVID in 2020. 
 
-Since the 1990s, US homicides have also been increasingly committed using guns, particularly handguns
+Over this same time period, homicides have also been increasingly committed using guns, as seen in the converging lines
 
 :::
 
 ## Homicide in Chicago {background-image="img/stephan-cassara-KnAIsBuitGg-unsplash.jpg" background-opacity="0.2"}
 
 ```{r homicide-in-chicago}
-#| cache: false
+#| cache: true
 
 load("./data/chicago_rates_year.RData")
 chicago_rates_year |>
@@ -129,22 +129,22 @@ chicago_rates_year |>
 Exaggerated in cities like Chicago, Philadelphia, Dallas
 
 ::: {.notes}
-These recent patterns were magnified in many major cities, one of which being Chicago, the focus of our project
+These recent patterns were magnified in many major cities, including Chicago, where our data were collected; in Chicago, recent gun homicide rates actually exceeded those of the 1990s crime peak.
+
+These patterns motivated our first paper.
 
 :::
 
-## {background-image="img/stephan-cassara-KnAIsBuitGg-unsplash.jpg" background-opacity="0.2"}
-
-![](img/jno.png)
-
-<br>Our questions:
+## Questions {background-image="img/stephan-cassara-KnAIsBuitGg-unsplash.jpg" background-opacity="0.2"}
 
 * To what extent were individuals growing up in Chicago in the 1990s and early 2000s **exposed to gun violence**?
 * And how did this exposure differ by **race**, **sex** and birth **cohort**?
 
+![](img/jno.png)
+
 ::: {.notes}
 
-In our paper last year, we examined how these aggregate patterns related to personal exposure to gun violence among the participants in the Project on Human Development in Chicago Neighborhoods who grew up in Chicago in the 1990s and early 2000s
+In our first paper, we described patterns in personal exposure to gun violence using data from the PHDCN, which I'll provide some quick background on.
 
 :::
 
@@ -157,19 +157,29 @@ In our paper last year, we examined how these aggregate patterns related to pers
 ### Project on Human Development in Chicago Neighborhoods
 
 ::: nonincremental
--   6200 children in Chicago from 7 age cohorts, newborn to 18
+-   6200 children from 7 age cohorts, born 1978 to 1996
 -   3 interviews from 1995--2003
--   Rich contextual data
+-   Representative of Chicago and its neighborhoods
+
 :::
+
+::: {.notes}
+
+The PHDCN cohort study, collected data on children in Chicago who ranged from newly born to age 18 at the start of the project in 1995; that is, born between 1978 and 1996.
+
+The sampling design generated a representative panel of children living in the city of Chicago in the mid-90s.
+
+:::
+
 
 ##  {background-image="img/max-bender-yb7Yg3Rv7WA-unsplash.jpg" background-opacity="0.2"}
 
 ### Project on Human Development in Chicago Neighborhoods
 
 ::: nonincremental
--   6200 children in Chicago from 7 age cohorts, newborn to 18
+-   6200 children from 7 age cohorts, born 1978 to 1996
 -   3 interviews from 1995--2003
--   Rich contextual data
+-   Representative of Chicago and its neighborhoods
 :::
 
 ::::: columns
@@ -179,10 +189,10 @@ In our paper last year, we examined how these aggregate patterns related to pers
 ### PHDCN+
 
 ::: nonincremental
--   Representative sample of 4 cohorts
+-   60% subsample of 4 cohorts
 -   1057 interviewed in 2012
 -   682 followed-up in 2021
--   Followed across US
+-   Followed throughout the US
 :::
 
 ::::
@@ -195,18 +205,28 @@ Funded by:<br>![](img/ncgvr.svg)
 
 ::: {.notes}
 
-Resulting data uniquely well suited to separating effects of large-scale social change---like rates of violence---from age and birth timing.
+Later, a subsample of four cohorts were selected for longterm follow-up in as part of what we call the PHDCN+, specifically cohorts born 1981, 1984, 1987, and 1996.
+
+Because of their birth years, the oldest were exposed to the 1990s peak during adolescence and the youngest came of age during the safest period but experienced those recent surges in their early 20s.
+
+This means our data are uniquely well suited to separating effects of large-scale social change---like rates of violence---from normal processes of aging.
 
 :::
 
-# Exposure to gun violence {background-image="img/max-bender-yb7Yg3Rv7WA-unsplash.jpg" background-opacity="0.4"}
+# [Exposure to gun violence]{.r-fit-text}{background-image="img/clay-banks-nsAn3nSW5T0-unsplash.jpg" background-opacity="0.4"}
 
-## Age at first getting shot {background-image="img/max-bender-yb7Yg3Rv7WA-unsplash.jpg" background-opacity="0.15"}
+::: {.notes}
+
+First, let's look at their exposure to gun violence.
+
+:::
+
+## Age at first getting shot {background-image="img/clay-banks-nsAn3nSW5T0-unsplash.jpg" background-opacity="0.15"}
 
 <br>
 
 ```{r}
-#| cache: false
+#| cache: true
 #| warning: false
 #| message: false
 #| fig-width: 12
@@ -284,20 +304,29 @@ draw_curve <- function(covar, outcome = outcome, xaxis = "age", ylims = c(0,60),
   (draw_curve("sex", "been_shot", noaxis = TRUE, ylims = c(0,12)) + theme(plot.margin = margin(0,10,0,10))) + 
   (draw_curve("cohort", "been_shot", noaxis = TRUE, ylims = c(0,12)) + theme(plot.margin = margin(0,0,0,20)))
   ) &
-  plot_annotation(theme = theme(plot.background = element_rect(fill = "transparent",colour = NA), text = element_text(family = plot_font,  color = "white")), caption = "Estimated cumulative incidence from non-parametric Turnbull MLE with survey and attrition weights")
+  plot_annotation(theme = theme(plot.background = element_rect(fill = "transparent",colour = NA), text = element_text(family = plot_font,  color = "white")), caption = "Estimated cumulative exposure from non-parametric Turnbull MLE with survey and attrition weights")
 ```
 
 
 * Concentrated at transition to adulthood
 * Also late 30s / post-2016 but only for Black / Hispanic
 
+::: {.notes}
 
-## [Age first seeing someone get shot]{.r-fit-text} {background-image="img/max-bender-yb7Yg3Rv7WA-unsplash.jpg" background-opacity="0.15"}
+These curves show weighted estimates of the percentage of the study population that had been shot by a given age.
+
+As a sample of Chicago's---including from the most disadvantaged neighborhoods---over 60 reported being shot or were recorded as dying to gunshot wounds in official records over the 25-year study period.
+
+We see here getting shot is highly concentrated among black and hispanic men during late adolescence through the early 20s--but also later in the mid-30s, which mainly happened around 2020-2021.
+
+:::
+
+## Age first seeing someone get shot {background-image="img/clay-banks-nsAn3nSW5T0-unsplash.jpg" background-opacity="0.15"}
 
 <br>
 
 ```{r}
-#| cache: false
+#| cache: true
 #| warning: false
 #| message: false
 #| fig-width: 12
@@ -381,12 +410,20 @@ draw_curve <- function(covar, outcome = outcome, xaxis = "age", ylims = c(0,60),
 * Occurs often and at earlier age than being shot
 * Similar race/ethnicity but not sex disparities
 
-## Takeaways {background-image="img/stephan-cassara-KnAIsBuitGg-unsplash.jpg" background-opacity="0.2"}
+::: {.notes}
+
+We repeated this analysis for seeing others getting shot, which is much more common--exceeding 50% lifetime prevalence in some groups.
+
+Notably, seeing shootings occurred on average earlier than being shot and is more strongly disproportionate by race than by sex, likely reflecting that it often happens in public spaces in disadvantaged neighborhoods.
+
+:::
+
+## Takeaways {background-image="img/clay-banks-nsAn3nSW5T0-unsplash.jpg" background-opacity="0.2"}
 
 Exposure to gun violence varies sharply race, sex, and birth year
 
 * Adolescent exposure high in early 1990s, low afterward
-* Adult exposure low until 2016-2021
+* Adult exposure uncommon until 2016-2021
 * Black and Hispanic males at highest risk
 
 . . .
@@ -395,10 +432,14 @@ Exposure to gun violence varies sharply race, sex, and birth year
 
 * One key proximal cause: **gun carrying**
 
-## [Gun homicide is mostly handgun homicide]{.r-fit-text}{background-image="img/stephan-cassara-KnAIsBuitGg-unsplash.jpg" background-opacity="0.2"}
+
+# Gun carrying {background-image="img/pedro-lastra-5Bv3EcijAl4-unsplash.jpg" background-opacity="0.4"}
+
+
+## [Gun homicide is mostly handgun homicide]{.r-fit-text}{background-image="img/pedro-lastra-5Bv3EcijAl4-unsplash.jpg" background-opacity="0.2"}
 
 ```{r}
-#| cache: false
+#| cache: true
 load("./data/shr_gun_type.RData")
 shr_gun_type |>
   mutate(pr = n/sum(n),
@@ -425,7 +466,7 @@ ggplot(aes(x = type, y = pr, fill = type)) +
 Most handgun violence involves **concealed handguns**
 
 
-## [Handgun violence over the life course]{.r-fit-text}{background-image="img/stephan-cassara-KnAIsBuitGg-unsplash.jpg" background-opacity="0.2"}
+## [Handgun violence over the life course]{.r-fit-text}{background-image="img/pedro-lastra-5Bv3EcijAl4-unsplash.jpg" background-opacity="0.2"}
 
 <br>Most concealed handgun research focuses on adolescents
 
@@ -435,7 +476,7 @@ Most handgun violence involves **concealed handguns**
 
 
 
-## [Handgun homicide is increasingly committed by adults]{.r-fit-text}{background-image="img/max-bender-yb7Yg3Rv7WA-unsplash.jpg" background-opacity="0"}
+## [Handgun homicide is increasingly committed by adults]{.r-fit-text}{background-image="img/pedro-lastra-5Bv3EcijAl4-unsplash.jpg" background-opacity="0"}
 
 :::: {.columns}
 
@@ -451,12 +492,26 @@ Most handgun violence involves **concealed handguns**
 
 ::::
 
-## [Handgun homicide is increasingly committed by adults]{.r-fit-text}{background-image="img/max-bender-yb7Yg3Rv7WA-unsplash.jpg" background-opacity="0"}
+
+::: {.notes}
+
+The left shows that gun violence curve from earlier while the right shows the age distribution of homicide offenders.
+
+We see here that a focus on adolescents was warranted by age patterns of gun violence in the 1990s, but recent increases in gun violence have been concentrated among adults.
+
+:::
+
+## [Handgun homicide is increasingly committed by adults]{.r-fit-text}{background-image="img/pedro-lastra-5Bv3EcijAl4-unsplash.jpg" background-opacity="0.2"}
 
 ![](img/age-curves.png)
 
+::: {.notes}
 
-## [Handgun violence over the life course]{.r-fit-text}{background-image="img/stephan-cassara-KnAIsBuitGg-unsplash.jpg" background-opacity="0.2"}
+If we freeze that, you can see the proportion of gun homicides committed by adolescents in 2021 was barely over half what it was 30 years ago.
+
+:::
+
+## [Handgun violence over the life course]{.r-fit-text}{background-image="img/pedro-lastra-5Bv3EcijAl4-unsplash.jpg" background-opacity="0.2"}
 
 <br>Most concealed handgun research focuses on adolescents
 
@@ -464,31 +519,34 @@ Most handgun violence involves **concealed handguns**
 <br>But handgun offending occurs throughout the life course
 
 
-<br>We know little about **gun carrying over the life course**
+<br>This is a problem, because we know little about **gun carrying over the life course**
 
 
-## Questions {background-image="img/clay-banks-nsAn3nSW5T0-unsplash.jpg" background-opacity="0.2"}
+## Questions {background-image="img/benjamin-suter-mpLex62zVKQ-unsplash.jpg" background-opacity="0.2"}
 
 * When does **onset** of concealed carry occur?
 
-. . .
-
 * Is there **continuity** in carry over the life course?
 
+   * Are adolescent carriers still carrying today?
    * Does it differ for legal and illegal carry? 
-
-. . .
 
 * Does **exposure to gun violence** predict later carrying?
 
    * Does it differ for adolescents and adults?
 
 
-## [Onset of concealed carry by age]{.r-fit-text}{background-image="img/pedro-lastra-5Bv3EcijAl4-unsplash.jpg" background-opacity="0.2"}
+::: {.notes}
+
+Accordingly, our second paper was motivated by three major questions.
+
+:::
+
+## [Onset of concealed carry by age]{.r-fit-text}{background-image="img/benjamin-suter-mpLex62zVKQ-unsplash.jpg" background-opacity="0.15"}
 
 
 ```{r}
-#| cache: false
+#| cache: true
 #| warning: false
 #| message: false
 #| fig-width: 12
@@ -566,17 +624,25 @@ draw_curve <- function(covar, outcome = outcome, xaxis = "age", ylims = c(0,60),
   (draw_curve("sex", "concealed_carry", ylims = c(0, 50), noaxis = TRUE, year_mark = TRUE) + theme(plot.margin = margin(0,10,0,10))) + 
   (draw_curve("cohort", "concealed_carry", ylims = c(0, 50), noaxis = TRUE, year_mark = TRUE) + theme(plot.margin = margin(0,0,0,20)))
   ) &
-  plot_annotation(theme = theme(plot.background = element_rect(fill = "transparent",colour = NA), text = element_text(family = plot_font,  color = "white")), caption = "Estimated cumulative incidence from non-parametric Turnbull MLE with survey and attrition weights")
+  plot_annotation(theme = theme(plot.background = element_rect(fill = "transparent",colour = NA), text = element_text(family = plot_font,  color = "white")), caption = "Estimated cumulative probability of exposure from non-parametric Turnbull MLE with survey and attrition weights")
 
 ```
 
-* Rapidly rise in adolescence, then again in 30s
-* Race/ethnicity patterns diverge from exposure
+* Rapidly rises in adolescence, then again in 30s
+* Differences sharpest in adolescence
 
-## [Onset of concealed carry by year]{.r-fit-text}{background-image="img/pedro-lastra-5Bv3EcijAl4-unsplash.jpg" background-opacity="0.2"}
+::: {.notes}
+
+First, for onset, these curves depict cumulative probabilities of having a carried a gun by age.
+
+These curves have three distinct regions: A rapid increase in adolescence, a slow growth in adulthood, and then a rapid increase again at the end of each curve, regardless of age--that is, in 2020 and 2021.
+
+:::
+
+## [Onset of concealed carry by year]{.r-fit-text}{background-image="img/benjamin-suter-mpLex62zVKQ-unsplash.jpg" background-opacity="0.15"}
 
 ```{r}
-#| cache: false
+#| cache: true
 #| warning: false
 #| message: false
 #| fig-width: 12
@@ -656,17 +722,23 @@ draw_curve <- function(covar, outcome = outcome, xaxis = "age", ylims = c(0,60),
   (draw_curve("sex", "concealed_carry", "year",ylims = c(0, 40), noaxis = TRUE, year_mark = TRUE) + theme(plot.margin = margin(0,10,0,10))) + 
   (draw_curve("cohort", "concealed_carry", "year", ylims = c(0, 40), noaxis = TRUE, year_mark = TRUE) + theme(plot.margin = margin(0,0,0,20)))
   ) &
-  plot_annotation(theme = theme(plot.background = element_rect(fill = "transparent",colour = NA), text = element_text(family = plot_font,  color = "white")), caption = "Estimated cumulative incidence from non-parametric Turnbull MLE with survey and attrition weights")
+  plot_annotation(theme = theme(plot.background = element_rect(fill = "transparent",colour = NA), text = element_text(family = plot_font,  color = "white")), caption = "Estimated cumulative probability of carry from non-parametric Turnbull MLE with survey and attrition weights")
 ```
 
-* Adult increases are period effects: unstable times
+* Adult increases are period effects
 * Large increases in new carriers since 2016
 
-## [Continuity: Who is still carrying in 2020?]{.r-fit-text}{background-image="img/benjamin-suter-mpLex62zVKQ-unsplash.jpg" background-opacity="0.2"}
+::: {.notes}
+
+If we rearrange these be calendar year instead of age, we see that after initial rises from adolescence, the curves are quite smooth until they abruptly increase in 2016 and especially 2020: There were a lot of new gun carriers then, particularly among female and Black respondents, which other research teams have observed as well.
+
+:::
+
+## [Continuity: Who is still carrying in 2020?]{.r-fit-text}{background-image="img/benjamin-suter-mpLex62zVKQ-unsplash.jpg" background-opacity="0.15"}
 
 
 ```{r}
-#| cache: false
+#| cache: true
 load("./data/continuity_within_data.RData")
 continuity_within_data |>
   filter(group == "Within onset group" & concealed_carry_status != "Did not carry" & !str_detect(Initiation, "Never carried")) |>
@@ -692,11 +764,20 @@ continuity_within_data |>
 * 60% of young carriers not carrying today
 * Young carriers no more likely to carry without permits
 
+::: {.notes}
 
-## [Exposure to gun violence and carrying]{.r-fit-text}{background-image="img/ozzie-stern-dkwJLowVvl4-unsplash.jpg" background-opacity="0.2"}
+Next, we were interested in how age of first carry was related to carrying in the year before our survey---that is, during peak COVID.
+
+Interestingly, we found 60% of respondents who carried guns as adolescents were not carrying, while over 80% of those who started as adults had carried recently.
+
+The adolescent onset and adult onset groups were also equally likely to be carrying without a permit, which was required in all locations our respondents were living at the time.
+
+:::
+
+## [Exposure to gun violence and carrying]{.r-fit-text}{background-image="img/benjamin-suter-mpLex62zVKQ-unsplash.jpg" background-opacity="0.15"}
 
 ```{r}
-#| cache: false
+#| cache: true
 load("./data/exp_preds.RData")
 exp_preds  |>
   mutate(model = str_remove(model, "\\n\\(N=.*$")) |>
@@ -727,29 +808,64 @@ exp_preds  |>
 * Exposed adolescents twice as likely to carry
 * Adult carry similar between those exposed and not
 
-## Takeaway: Two Processes {background-image="img/joel-mott-s-rsM-AktbA-unsplash.jpg" background-opacity="0.2"}
+::: {.notes}
+
+FInally, we were interested whether exposure to gun violence was associated with later gun carrying.
+
+These are results from fairly complicated models where we predict the probability of starting to carry a gun in some age, say from 15 to 21, using exposure to gun violence prior to those ages, that is age 15 or 21.
+
+Here we replicate past work showing exposure is associated with higher adolescent carrying--a doubling--but we find no similar association for adults. Those exposed and those not are equally likely to start carrying.
+
+:::
+
+## [Takeaway: Two pathways of gun carrying]{.r-fit-text}{background-image="img/benjamin-suter-mpLex62zVKQ-unsplash.jpg" background-opacity="0.2"}
 
 Carry appears to follow two processes:
+
+::: {.notes}
+Taken together, we think these findings suggest two distinct pathways of gun carrying in our study population.
+:::
+
 
 . . .
 
 * **Adolescent-onset**
   * One third of those ever carrying
-  * Usually age limited
+  * Most no longer carrying today
   * Associated with exposure
+
+::: {.notes}
+Those who started to carrying in adolescence are about a third of lifetime carriers, but most have not carried recently. Their onset seems strongly associated with prior exposure to gun violence.
+
+It is important to note here that all adolescent carry is of course illegal---but we did not find this group to be more likely to carry illegally recently.
+:::
 
 . . .
  
 * **Adult-onset**
   * Two thirds of those ever carrying
-  * Usually persistent
+  * Most still carrying today
   * Not associated with exposure
 
+::: {.notes}
+Those who started to carry as adults are about two-thirds of lifetime carriers, and most still carried recently. Their onset does not appear to be associated with prior exposure.
+:::
+
 ## Next Questions {background-image="img/joel-mott-s-rsM-AktbA-unsplash.jpg" background-opacity="0.2"}
+
+* Are these patterns seen in other data sources?
 
 * What mechanisms link macrosocial context to individual gun carrying across the life course?
 
 * How does life-course variation in carrying impact overall rates of violence?
+
+::: {.notes}
+
+Okay, that's a very rapid glimpse of some of our recent findings.
+
+Our next steps are to further investigate what we've found, in particular the mechanisms that link community and macro-social context to to carrying, for example, whether increases in carrying contributed to or were a respond to recent spikes in gun violence.
+
+:::
 
 
 ## Feedback and Questions {.smaller background-image="img/joel-mott-s-rsM-AktbA-unsplash.jpg" background-opacity="0.4"}
@@ -769,3 +885,6 @@ For more about the PHDCN+:
 | <https://sites.harvard.edu/phdcn/>
 | [https://doi.org/10.1007/s40865-022-00203-0](https://sites.harvard.edu/phdcn/)
 
+::: {.notes}
+Thanks for listening, and hopefully absorbing some of it; I'm look forward to any questions you have at the end.
+:::
